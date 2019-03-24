@@ -29,20 +29,18 @@ public class App {
         try {
             App app = new App();
             System.out.println(new File(".").getAbsolutePath());
+            //TO DO
             //      ./app.jar
-            // еслить есть папка ./INPUT - то считываем из нее файлы и выходной файл кладем в текущую папку - ./output.html
+            // если есть папка ./INPUT - то считываем из нее файлы и выходной файл кладем в текущую папку - ./output.html
             // если такой папки нет - то создаем ее, и кладем файл кладем в текущую папку - ./Положите ваши файлы для анализа в папку INPUT.html
-            String dirPath = "C:\\TESTNG_LOGS\\";
+            String dirPath = "C:\\TESTNG_LOGS\\"; //TO DO
             List<LogView> logViewList = app.parseFilesFromDir(dirPath);
             app.threadViewList = ThreadView.fillThreadViews(logViewList);
             app.calcViewBoxParams(app.getThreadViewList());
             app.prepareToPrint(app.getThreadViewList());
-            calcAndSetXcoord(app.getThreadViewList());
             app.printHtmlFile(app.getThreadViewList());
-
-
         } catch (Exception e){
-            System.out.println("ОШИКА!!! : " + e.toString());
+            System.out.println("ОШИБКА!!! : " + e.toString()); //TO DO
         }
     }
 
@@ -62,11 +60,7 @@ public class App {
         }
         this.minY = min;
         this.maxY = max;
-        System.out.println("min/max: " + min + " / " + max);
         App.shiftY = (min - (min % 100));
-        System.out.println( min );
-        System.out.println( shiftY );
-        System.out.println( max - shiftY + 100);
         App.vb_height = max - shiftY + 100;
         App.vb_y1 = max - shiftY + 100;
     }
@@ -78,9 +72,6 @@ public class App {
             t.setX1(tDistance + ((tWidth + tDistance) * i) + tWidth);
             t.prepareToPrint();
         }
-    }
-    private static void calcAndSetXcoord (List<ThreadView> list) {
-
     }
 
     private static List<LogView> parseFilesFromDir(String dirPath){
