@@ -8,9 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LogView {
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
+    private static final String EMPTY_STRING = "";
+    private static final Pattern THREAD_NAME_PATTERN = Pattern.compile("\\[.*\\]");
 
     private String htmlId;
     private String fileName;
@@ -44,11 +48,16 @@ public class LogView {
         return logView;
     }
 
-    private static String parseThreadName (List<String> lines) {
-        //return lines.get(0).substring(30, 44);
+    public static String parseThreadName (List<String> lines) {
+        String threadName = EMPTY_STRING;
+
         String s = lines.get(0);
-        String ss = s.substring(30, 52);
-        return ss;
+
+        Matcher matcher = THREAD_NAME_PATTERN.matcher(s);
+        if(matcher.find()) {
+            threadName = s.substring(matcher.start(), matcher.end());
+        }
+        return threadName;
     }
 
     private static void parseNumbers (LogView logView) {

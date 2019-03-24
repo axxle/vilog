@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ThreadView {
+    private static final Pattern THREAD_NUMBER_PATTERN= Pattern.compile("-\\d*\\]");
     private String threadName;
     private Integer threadNumber;
     List<LogView> logViewList = new ArrayList<LogView>();
@@ -16,7 +19,6 @@ public class ThreadView {
     private String[] colors = new String [] {"#30D5C8", "#98FF98"};
 
     public void prepareToPrint(){
-        //отсортировать по времени список логов в потоке
         Collections.sort(this.logViewList, new Comparator() {
                     public int compare(Object o1, Object o2)
                     {
@@ -31,7 +33,6 @@ public class ThreadView {
                     }
                 }
         );
-        //засетить color чтобы чередовалось
         setColors(this.logViewList);
     }
 
@@ -56,7 +57,6 @@ public class ThreadView {
             ).getLogViewList()
                     .add(logView);
         }
-        //отсортировать внутри по вертикали (для удобства)
         return threadViewList;
     }
 
@@ -69,7 +69,11 @@ public class ThreadView {
                 continue;
             Integer threadNumber = 20;
             try {
-                threadNumber = Integer.parseInt(threadName.substring(threadName.length()-1)); //TO DO спарсить номер потока
+                Matcher matcher = THREAD_NUMBER_PATTERN.matcher(threadName);
+                if(matcher.find()) {
+                    String sub = threadName.substring(matcher.start()+1, matcher.end()-1);
+                    threadNumber = Integer.parseInt(sub);
+                }
             } catch (Exception e) {
                 System.out.println(threadName + " : " + e.toString());
             }
@@ -99,11 +103,6 @@ public class ThreadView {
                 }
         );
         return emptyThreadViews;
-    }
-
-    public static String parseThreadName (String line) {
-        String threadName = line.substring(30, 44); //TODO regexp
-        return threadName;
     }
 
     public String getThreadName() {
