@@ -72,13 +72,13 @@ public class LogView {
     private static String parseInitTimeStr (List<String> lines) { //TO DO
         if (!lines.isEmpty())
             return lines.get(0).substring(0, 23);
-        return "";
+        return EMPTY_STRING;
     }
 
     private static String parseDestroyTimeStr (List<String> lines) {
         if (!lines.isEmpty())
             return lines.get(lines.size()-1).substring(0, 23);
-        return "";
+        return EMPTY_STRING;
     }
 
 
